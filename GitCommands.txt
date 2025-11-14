@@ -1,0 +1,105 @@
+Download and Install Git Bash
+Visit the official Git website: https://git-scm.com/downloads
+Click on "Windows" to download the installer
+Run the installer (.exe file)
+Accept the license agreement
+Choose the installation location (default is usually fine)
+Select components (make sure "Git Bash" is checked)
+Choose the default editor (select your preferred editor)
+Choose "Git from the command line and also from 3rd-party software" option
+Choose the SSH executable (use the OpenSSH option)
+Choose HTTPS transport backend (use the OpenSSL library)
+Configure line ending conversions (select "Checkout Windows-style, commit Unix-style line endings")
+Configure the terminal emulator (select "Use MinTTY")
+Configure extra options (enable file system caching and Git Credential Manager)
+Complete the installation
+
+
+Set your identity
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+
+Set default branch name to 'main'
+git config --global init.defaultBranch main
+
+Configure line ending behavior for Windows
+git config --global core.autocrlf true
+
+Add color to Git output
+git config --global color.ui auto
+
+Configure credential helper for Windows
+git config --global credential.helper wincred
+
+# Set up useful aliases
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.st status
+git config --global alias.unstage 'reset HEAD --'
+git config --global alias.last 'log -1 HEAD'
+
+# Pull behavior (avoid unexpected merge commits)
+git config --global pull.rebase false
+
+# Show current configuration
+git config --list
+
+
+Creating an SSH Key
+SSH keys provide a secure way to authenticate with Git servers without entering your password each time. Here's a step-by-step guide to create and set up an SSH key:
+Creating an SSH Key
+Open your terminal or Git Bash
+Generate a new SSH key (replace "your_email@example.com" with your actual email):
+Bash ssh-keygen -t ed25519 -C "your_email@example.com"
+If you're using an older system that doesn't support Ed25519:
+Bash ssh-keygen -t rsa -b 4096 -C your_email@example.com
+
+3.  **When prompted for a location**, press Enter to accept the default file location:
+   Enter file in which to save the key (/c/Users/YOUR_USERNAME/.ssh/id_ed25519): [Press Enter]
+4.  **Create a secure passphrase** when prompted (recommended but optional):
+   Enter passphrase (empty for no passphrase): [Type a passphrase]
+   Enter same passphrase again: [Type passphrase again]
+
+Start the SSH agent:
+Bash eval "$(ssh-agent -s)"
+Add your SSH key to the agent: For Ed25519 keys:
+Bash ssh-add ~/.ssh/id_ed25519
+Copying Your SSH Public Key - you'll need to add your public key to your Git hosting service:
+Bash clip < ~/.ssh/id_ed25519.pub  -> # Copy to clipboard
+Adding Your SSH Key to Git Hosting Service GitHub:
+Go to your GitHub account → Settings → SSH and GPG keys
+Click "New SSH key"
+Enter a title (like "My Laptop")
+Paste your SSH public key
+Click "Add SSH key"
+
+Testing Your Connection
+To verify your SSH connection: For GitHub:
+Bash ssh -T git@github.com
+You should receive a success message if everything is set up correctly.
+Changing Your Repository URL to Use SSH
+If you've already cloned a repository using HTTPS, you can switch to SSH:
+Bash git remote –v    # Check current remote URL
+# Change to SSH
+git remote set-url origin git@github.com:username/repository.git
+Replace the URL with your actual repository SSH URL.
+
+
+Create repository in UI
+Clone your own repository 
+    git clone https://github.com/username/repository-name.git  or
+    git clone git@github.com:username/repository.git
+
+    git clone https://github.com/EvelinnP/MHPWorkshop.git
+    git clone git@github.com:EvelinnP/MHPWorkshop.git
+
+
+
+
+
+
+
+
+
+
