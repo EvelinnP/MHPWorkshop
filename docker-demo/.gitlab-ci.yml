@@ -1,0 +1,70 @@
+stages:
+  - build
+  - test
+  - canary
+  - production
+
+# ---------- BUILD STAGE ----------
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - echo "Building Docker image..."
+    - docker build -t myapp:latest .
+  artifacts:
+    paths:
+      - build/
+  only:
+    - main
+
+# ---------- TEST STAGE ----------
+test1:
+  stage: test
+  image: alpine:latest
+  script:
+    - echo "Running Unit Tests (test1)..."
+    - echo "All good!"
+  needs: ["build"]
+
+test2:
+  stage: test
+  image: alpine:latest
+  script:
+    - echo "🧪 Running Integration Tests (test2)..."
+    - echo "All tests passed!"
+  needs: ["build"]
+
+# ---------- CANARY STAGE ----------
+auto-deploy:
+  stage: canary
+  image: alpine:latest
+  script:
+    - echo "Deploying canary release..."
+    - echo "Canary deployed successfully."
+  environment:
+    name: canary
+    url: https://canary.example.com
+  only:
+    - main
+  when: on_success
+  needs:
+    - test1
+    - test2
+
+# ---------- PRODUCTION STAGE ----------
+deploy-production:
+  stage: production
+  image: alpine:latest
+  script:
+    - echo "Deploying to production..."
+    - echo "Production deployment complete!"
+  environment:
+    name: production
+    url: https://example.com
+  when: manual   # matches the “play” button in your screenshot
+  only:
+    - main
+  needs:
+    - auto-deploy
